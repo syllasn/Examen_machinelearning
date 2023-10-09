@@ -1,5 +1,10 @@
 # import libraries
-
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import LabelEncoder
+from sklearn.preprocessing import StandardScaler
 
 # Function to load data (5 pts)
 def load_data(file_path):
@@ -39,8 +44,7 @@ def deploy_model(model, X_test):
 def main():
     # Load data
     data = load_data("link")
-    
-    # Preprocess data
+     # Preprocess data
     preprocessed_data = preprocess_data(data)
     
     # Split data
