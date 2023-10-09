@@ -3,7 +3,8 @@ import pandas as pd
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import accuracy_score
 from sklearn.linear_model import LinearRegression
-from sklearn.metrics import mean_squared_error
+from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import mean_squared_error, f1_score, classification_report
 from sklearn.preprocessing import LabelEncoder
 import streamlit as st
 import pickle
@@ -91,8 +92,8 @@ def main():
     print(f'Mean Squared Error: {mse}')
     
     # Deploy the model (bonus)
-    with open('malaria_model.pkl', 'rb') as model_file:
-        model = pickle.load(model_file)
+    # with open('malaria_model.pkl', 'rb') as model_file:
+    #     model = pickle.load(model_file)
 
 if __name__ == "__main__":
     main()
