@@ -3,7 +3,7 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 from sklearn.model_selection import train_test_split
-from statsmodels.tsa.arima_model import ARIMA
+from statsmodels.tsa.arima.model import ARIMA
 
 # Function to load data (5 pts)
 def load_data(file_path):
@@ -46,8 +46,13 @@ def split_data(data):
 # Function to train a model with hyperparameters (30 pts)
 def train_model(train_data): 
     # Train a or many models with hyperparameter tuning
+    # Define the ARIMA model (p, d, q)
+    p, d, q = 1, 1, 1
+    model = ARIMA(train_data, order=(p, d, q))
+    # Fit the model to the training data
+    model_fit = model.fit(disp=0)
     # Return best model
-    pass
+    return model_fit
 
 # Function to evaluate the model (15 pts)
 def evaluate_model(model, X_test, y_test):
@@ -72,7 +77,7 @@ def main():
     print(train_data)
     
     # Train a model with hyperparameters
-    best_model = train_model(X_train, y_train)
+    best_model = train_model(train_data)
     
     # Evaluate the model
     evaluate_model(best_model, X_test, y_test)
