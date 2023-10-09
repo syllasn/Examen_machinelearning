@@ -12,12 +12,14 @@ import joblib
 # Function to load data (5 pts)
 def load_data(file_path):
     # Load data from the CSV file or another format and return data
-    data = pd.read_excel(file_path,index_col="date", parse_dates=True)
+    data = pd.read_excel(file_path, parse_dates=True)
     return data
     
 
 # Function to preprocess data (handling missing and outlier data) (15 pts)
 def preprocess_data(data):
+    data["Year"] = data["date"].dt.year
+    data["Month"] = data["date"].dt.month
     # Handle missing data using appropriate imputation
     print(data.shape)
     print(data.isna().sum())
@@ -37,9 +39,10 @@ def preprocess_data(data):
 # Function to split data into training and testing sets (5 pts)
 def split_data(data): 
     # Split data into training (80%) and testing (20%) sets
-    X = data[["Facility"]]
+    X = data[["Facility","Month","Year"]]
     X = pd.get_dummies(X, columns=['Facility'], prefix='Facility')
     #X = X
+    print(X.columns)
     y = data.Value
     #data['Value_Lag1'] = data['Value'].shift(1)
     
@@ -115,11 +118,13 @@ def deploy_model(model, X_test):
         # Get user input from the web form
         # Modify this part to match your input features
         facility = request.form.get('Facility')
+        year = request.form.get('Year')
+        month = request.form.get('Month')
         #value = float(request.form.get('Value'))
 
         # Perform any necessary preprocessing on the input data
         # Create a feature vector for prediction
-        feature_vector = [facility]  # Modify this based on your input features
+        feature_vector = [facility,year,month]  # Modify this based on your input features
 
         # Make a prediction using your model
         prediction = model.predict([feature_vector])

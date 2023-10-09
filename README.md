@@ -1,3 +1,3 @@
 # Examen_machinelearning
 
-Pour lancer le model il faut juste
+Pour lancer le model il faut juste  x
