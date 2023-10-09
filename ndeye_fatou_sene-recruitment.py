@@ -55,9 +55,13 @@ def train_model(train_data):
     return model_fit
 
 # Function to evaluate the model (15 pts)
-def evaluate_model(model, X_test, y_test):
+def evaluate_model(model, test_data):
     # Evaluate the best model 
-    pass
+    start = test_data.shape[0]
+    end = start + 11
+    preds = model.predict(start, end)
+    rmse = np.sqrt(np.mean((test_data.values - preds)**2))
+    print(f"Root Mean Squared Error (RMSE): {rmse}")
 
 # Function to deploy the model (bonus) (10 pts)
 def deploy_model(model, X_test):
@@ -80,7 +84,7 @@ def main():
     best_model = train_model(train_data)
     
     # Evaluate the model
-    evaluate_model(best_model, X_test, y_test)
+    evaluate_model(best_model, test_data)
     
     # Deploy the model (bonus)
     deploy_model(best_model, X_test)
