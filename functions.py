@@ -58,16 +58,16 @@ def train_model(X_train, y_train):
         {'n_jobs':[True,False]}, 
         {'positive':[True,False]}
     ]
-    param_grid_logis = [{
-        {'kernel':["linear", "poly", "rbf", "sigmoid", "precomputed"]},
-        {'gamma':["scale", "auto"]},
-        {'shrinking':[True,False]}
-    }]
-    param_grid_ridge= [{
+    param_grid_ridge= [
         {'copy_X':[True,False]},
         {'fit_intercept':[True,False]},
         {"alpha": [1.0, 1.5, 0.5, 2.0] }
-    }]
+    ]
+    param_grid_SVR = [
+        {'kernel':["linear", "poly", "rbf", "sigmoid", "precomputed"]},
+        {'gamma':["scale", "auto"]},
+        {'shrinking':[True,False]}
+    ]
     models = []
     models.append(LinearRegression())
     models.append(Ridge())
@@ -76,7 +76,7 @@ def train_model(X_train, y_train):
     parametres=[]
     parametres.append(param_grid_linr)
     parametres.append(param_grid_ridge)
-    parametres.append(param_grid_logis)
+    parametres.append(param_grid_SVR)
 
     mod, accu = gridsearch(models, parametres, X_train, y_train)
     for i in range(len(mod)):
@@ -112,7 +112,7 @@ def main():
     best_model = train_model(X_train, y_train)
     
     # Evaluate the model
-    evaluate_model(best_model, X_test, y_test)
+    print(evaluate_model(best_model, X_test, y_test))
     
     # Deploy the model (bonus)
     """deploy_model(best_model, X_test)"""
