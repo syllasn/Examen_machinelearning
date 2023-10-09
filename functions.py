@@ -1,5 +1,6 @@
 # import libraries
 import pandas as pd
+from sklearn.model_selection import train_test_split
 
 # Function to load data (5 pts)
 def load_data(file_path):
@@ -8,13 +9,11 @@ def load_data(file_path):
     return data
 
 # Function to preprocess data (handling missing and outlier data) (15 pts)
-def preprocess_data(file_path):
+def preprocess_data(data):
     # Handle missing data using appropriate imputation
     # Deal with outlier data 
     # return data
-    # Read the data from the input file into a DataFrame
-    data = load_data(file_path)
-
+    
     # Drop any rows with missing values
     data.dropna(inplace=True)
 
@@ -27,9 +26,15 @@ def preprocess_data(file_path):
     return data
 
 # Function to split data into training and testing sets (5 pts)
-def split_data(data): 
+def split_data(preprocessed_data): 
     # Split data into training (80%) and testing (20%) sets
-    pass
+    # Define your features (X) and target variable (y)
+    X = preprocessed_data.drop(columns=['Value'])  # Features (all columns except 'Value')
+    y = preprocessed_data['Value']  # Target variable
+
+    # Split the data into training and test sets (e.g., 80% training, 20% testing)
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+    return X_train, X_test, y_train, y_test
 
 # Function to train a model with hyperparameters (30 pts)
 def train_model(X_train, y_train): 
