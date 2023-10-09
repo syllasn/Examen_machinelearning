@@ -1,5 +1,6 @@
 import pandas as pd
 import numpy as np
+import streamlit as st
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import LabelEncoder, StandardScaler
 from sklearn.linear_model import LinearRegression
@@ -64,7 +65,7 @@ def train_model(X_train, y_train):
         {"alpha": [1.0, 1.5, 0.5, 2.0] }
     ]
     param_grid_SVR = [
-        {'kernel':["linear", "poly", "rbf", "sigmoid", "precomputed"]},
+        {'kernel':["linear", "poly", "rbf", "sigmoid"]},
         {'gamma':["scale", "auto"]},
         {'shrinking':[True,False]}
     ]
@@ -94,7 +95,6 @@ def evaluate_model(model, X_test, y_test):
 
 # Function to deploy the model (bonus) (10 pts)
 def deploy_model(model, X_test):
-    # Deploy the best model using Streamlit or Flask (bonus)
     pass
 
 # Main function
