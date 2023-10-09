@@ -36,41 +36,59 @@ def split_data(preprocessed_data):
     return train, test
 
 # Function to train a model with hyperparameters (30 pts)
-def train_model(X_train, y_train): 
-    # Define a grid of hyperparameters to search through
-    param_grid = {
-        'p': range(0, 3),  # AR order
-        'd': range(0, 2),  # I order
-        'q': range(0, 3),  # MA order
-        'P': range(0, 3),  # Seasonal AR order
-        'D': range(0, 2),  # Seasonal I order
-        'Q': range(0, 3),  # Seasonal MA order
-        's': [12],         # Seasonal period (assuming monthly data)
-    }
-
+def train_model(data): 
     best_model = None
-    best_mse = float('inf')
+    best_aic = np.inf
+    best_model_type = None
 
-    # Iterate through all possible combinations of hyperparameters
-    for params in ParameterGrid(param_grid):
+    # MA Model
+    for q in range(1, 6):
+        model = ARIMA(data, order=(0, 0, q))
         try:
-            # Fit a SARIMA model with the current hyperparameters
-            model = SARIMAX(y_train, exog=X_train, order=(params['p'], params['d'], params['q']),
-                            seasonal_order=(params['P'], params['D'], params['Q'], params['s']))
             results = model.fit()
-
-            # Calculate Mean Squared Error (MSE)
-            mse = mean_squared_error(y_train, results.fittedvalues)
-
-            # Update the best model if this one has a lower MSE
-            if mse < best_mse:
-                best_mse = mse
+            aic = results.aic
+            if aic < best_aic:
+                best_aic = aic
                 best_model = results
+                best_model_type = "MA"
         except:
             continue
 
-    # The best model is not returned, it's available for use outside of this function
-    return
+    # ARIMA Model
+    for p in range(1, 6):
+        for d in range(1, 3):
+            for q in range(1, 6):
+                model = ARIMA(data, order=(p, d, q))
+                try:
+                    results = model.fit()
+                    aic = results.aic
+                    if aic < best_aic:
+                        best_aic = aic
+                        best_model = results
+                        best_model_type = "ARIMA"
+                except:
+                    continue
+
+    # SARIMAX Model
+    for p in range(1, 6):
+        for d in range(1, 3):
+            for q in range(1, 6):
+                for P in range(1, 4):
+                    for D in range(1, 3):
+                        for Q in range(1, 4):
+                            model = SARIMAX(data, order=(p, d, q), seasonal_order=(P, D, Q, 12))
+                            try:
+                                results = model.fit()
+                                aic = results.aic
+                                if aic < best_aic:
+                                    best_aic = aic
+                                    best_model = results
+                                    best_model_type = "SARIMAX"
+                            except:
+                                continue
+
+    return best_model, best_model_type
+
 
 
 # Function to evaluate the model (15 pts)
