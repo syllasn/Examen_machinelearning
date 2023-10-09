@@ -9,7 +9,8 @@ from sklearn.preprocessing import StandardScaler
 # Function to load data (5 pts)
 def load_data(file_path):
     # Load data from the CSV file or another format and return data
-    pass
+    df = pd.read_excel(file_path)
+    return df
     
 
 # Function to preprocess data (handling missing and outlier data) (15 pts)
@@ -43,7 +44,8 @@ def deploy_model(model, X_test):
 # Main function
 def main():
     # Load data
-    data = load_data("link")
+    data = load_data("malaria.xlsx")
+    
      # Preprocess data
     preprocessed_data = preprocess_data(data)
     
