@@ -16,9 +16,24 @@ def load_data(file_path):
 # Function to preprocess data (handling missing and outlier data) (15 pts)
 def preprocess_data(data):
     # Handle missing data using appropriate imputation
+    # This method help to drop NaN values
+    data_nn = data.dropna()
     # Deal with outlier data 
+    num_col = ["Value"]
+    for i in num_col:
+        col_skew = data_nn[i].skew()
+        print(f"The skew for column {i} is {col_skew}")
+        if (col_skew < -1) | (col_skew > 1):
+            print(f"Column {i} has outliers")
+            data_nn[i] = np.where(data_nn[i] < data_nn[i].quantile(0.1), data_nn[i].quantile(0.1), data_nn[i])
+            data_nn[i] = np.where(data_nn[i] > data_nn[i].quantile(0.9), data_nn[i].quantile(0.9), data_nn[i])
+            print(f" The column {i} has been processed and the skew for column {i} is now {data_nn[i].skew()}")
+        else:
+            print(f"There are not outliers at column {i}")
+    
     # return data
-    pass
+    return data_nn
+    
 
 # Function to split data into training and testing sets (5 pts)
 def split_data(data): 
@@ -48,7 +63,7 @@ def main():
     
      # Preprocess data
     preprocessed_data = preprocess_data(data)
-    
+    print(preprocessed_data)
     # Split data
     X_train, X_test, y_train, y_test = split_data(preprocessed_data)
     
