@@ -1,18 +1,30 @@
 # import libraries
-
+import pandas as pd
 
 # Function to load data (5 pts)
 def load_data(file_path):
     # Load data from the CSV file or another format and return data
-    pass
-    
+    data = pd.read_excel(file_path)
+    return data
 
 # Function to preprocess data (handling missing and outlier data) (15 pts)
-def preprocess_data(data):
+def preprocess_data(file_path):
     # Handle missing data using appropriate imputation
     # Deal with outlier data 
     # return data
-    pass
+    # Read the data from the input file into a DataFrame
+    data = load_data(file_path)
+
+    # Drop any rows with missing values
+    data.dropna(inplace=True)
+
+    # Convert the 'date' column to a datetime object
+    data['date'] = pd.to_datetime(data['date'])
+
+    # Encode categorical variables (Facility) using one-hot encoding
+    data = pd.get_dummies(data, columns=['Facility'], drop_first=True)
+
+    return data
 
 # Function to split data into training and testing sets (5 pts)
 def split_data(data): 
