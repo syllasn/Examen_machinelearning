@@ -38,7 +38,12 @@ def preprocess_data(data):
 # Function to split data into training and testing sets (5 pts)
 def split_data(data): 
     # Split data into training (80%) and testing (20%) sets
-    pass
+    y = data["Value"]
+    X = data["date"]
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.2, random_state = 42)
+    
+    return X_train, X_test, y_train, y_test
+    
 
 # Function to train a model with hyperparameters (30 pts)
 def train_model(X_train, y_train): 
@@ -63,9 +68,10 @@ def main():
     
      # Preprocess data
     preprocessed_data = preprocess_data(data)
-    print(preprocessed_data)
+    
     # Split data
     X_train, X_test, y_train, y_test = split_data(preprocessed_data)
+    print(X_train)
     
     # Train a model with hyperparameters
     best_model = train_model(X_train, y_train)
