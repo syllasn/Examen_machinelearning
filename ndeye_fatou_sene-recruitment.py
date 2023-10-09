@@ -3,8 +3,7 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 from sklearn.model_selection import train_test_split
-from sklearn.preprocessing import LabelEncoder
-from sklearn.preprocessing import StandardScaler
+from statsmodels.tsa.arima_model import ARIMA
 
 # Function to load data (5 pts)
 def load_data(file_path):
@@ -38,15 +37,14 @@ def preprocess_data(data):
 # Function to split data into training and testing sets (5 pts)
 def split_data(data): 
     # Split data into training (80%) and testing (20%) sets
-    y = data["Value"]
-    X = data["date"]
-    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.2, random_state = 42)
+    train_size = int(len(data) * 0.8)  # 80% for training, 20% for testing
+    train_data, test_data = data[:train_size], data[train_size:]
     
-    return X_train, X_test, y_train, y_test
+    return train_data, test_data
     
 
 # Function to train a model with hyperparameters (30 pts)
-def train_model(X_train, y_train): 
+def train_model(train_data): 
     # Train a or many models with hyperparameter tuning
     # Return best model
     pass
@@ -70,8 +68,8 @@ def main():
     preprocessed_data = preprocess_data(data)
     
     # Split data
-    X_train, X_test, y_train, y_test = split_data(preprocessed_data)
-    print(X_train)
+    train_data, test_data = split_data(preprocessed_data)
+    print(train_data)
     
     # Train a model with hyperparameters
     best_model = train_model(X_train, y_train)
