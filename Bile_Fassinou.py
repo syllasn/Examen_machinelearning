@@ -1,9 +1,11 @@
 # import libraries
 import pandas as pd
+import streamlit as st
+
 from sklearn.model_selection import train_test_split
 import numpy as np
 import statsmodels.api as sm
-from statsmodels.tsa.arima_model import ARIMA
+from statsmodels.tsa.arima.model import ARIMA
 from statsmodels.tsa.statespace.sarimax import SARIMAX
 from sklearn.metrics import mean_absolute_error, mean_squared_error
 
@@ -92,34 +94,40 @@ def train_model(data):
 
 
 # Function to evaluate the model (15 pts)
-def evaluate_model(model, X_test, y_test):
+def evaluate_model(model, data):
     # Evaluate the best model 
-    pass
+    predictions = model.get_forecast(steps=len(data)).predicted_mean
+
+    # Calculer le RMSE et le MAE
+    rmse = np.sqrt(mean_squared_error(data, predictions))
+    mae = mean_absolute_error(data, predictions)
+
+    return rmse, mae
 
 # Function to deploy the model (bonus) (10 pts)
-def deploy_model(model, X_test):
+def deploy_model(model, test):
     # Deploy the best model using Streamlit or Flask (bonus)
     pass
 
 # Main function
 def main():
     # Load data
-    data = load_data("link")
+    data = load_data("malaria.xlsx")
     
     # Preprocess data
     preprocessed_data = preprocess_data(data)
     
     # Split data
-    X_train, X_test, y_train, y_test = split_data(preprocessed_data)
+    train, test = split_data(preprocessed_data)
     
     # Train a model with hyperparameters
-    best_model = train_model(X_train, y_train)
+    best_model = train_model(train)
     
     # Evaluate the model
-    evaluate_model(best_model, X_test, y_test)
+    evaluate_model(best_model, test)
     
     # Deploy the model (bonus)
-    deploy_model(best_model, X_test)
+    deploy_model(best_model, test)
 
 if __name__ == "__main__":
     main()
